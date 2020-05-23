@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Block extends Rectangle {
+public class Player extends Rectangle {
 
     public Texture image;
 
@@ -19,7 +19,7 @@ public class Block extends Rectangle {
     public int jumpSpeed;
     public int fallSpeed;
 
-    public Block() {
+    public Player() {
         image = new Texture(Gdx.files.internal("block.png"));
         width = 24;
         height = 24;

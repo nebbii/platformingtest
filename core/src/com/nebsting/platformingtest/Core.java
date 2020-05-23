@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class PlatformingGame extends Game {
+public class Core extends Game {
     OrthographicCamera camera;
 	SpriteBatch batch;
 
-    Block block;
+    Player player;
 	
 	@Override
 	public void create () {
@@ -20,7 +20,7 @@ public class PlatformingGame extends Game {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
-        block = new Block();
+        player = new Player();
 	}
 
 	@Override
@@ -28,11 +28,11 @@ public class PlatformingGame extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        block.logic();
+        player.logic();
 
         batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-        batch.draw(block.image, block.x, block.y);
+        batch.draw(player.image, player.x, player.y);
 		batch.end();
 
         camera.update();
