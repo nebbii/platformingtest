@@ -40,6 +40,7 @@ public class Block extends Rectangle {
     public void logic() {
         movePlayer();
         jumpPlayer();
+        gravity();
 
         Gdx.app.log("On Ground", Boolean.toString(onGround));
         Gdx.app.log("Speed", Float.toString(vy - jumpSpeed) + " of " + Float.toString(jumpSpeed));
@@ -59,11 +60,7 @@ public class Block extends Rectangle {
 
         // right
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if((x + vx * Gdx.graphics.getDeltaTime()) > 400 && y < 90) {
-                vx = 0;
-            } else {
-                vx = Math.min(vx + walkAcceleration, walkMaxSpeed);
-            }
+            vx = Math.min(vx + walkAcceleration, walkMaxSpeed);
         } 
         else if(vx > 0){
             vx = Math.max(vx - (walkAcceleration * 2), 0);
@@ -73,20 +70,18 @@ public class Block extends Rectangle {
     }
 
     public void jumpPlayer() {
-        if(y < 20 ||
-        (x > 400 && y < 100)) {
-            onGround = true;
-            vy = 0;
-        } else {
-            onGround = false;
-        }
-
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && onGround) {
             vy = jumpSpeed;
+            this.setOnGround(false);
             Gdx.app.log("Pressed", Float.toString(vy));
         }
+    }
 
-        // test collision
+    public void gravity() {
+        if(y < 20) {
+            this.collideBottom(20);
+        } 
+
         if(!onGround) {
             vy = vy - fallSpeed;
             Gdx.app.log("unpressed", Float.toString(vy));
@@ -94,5 +89,39 @@ public class Block extends Rectangle {
 
         y += vy * Gdx.graphics.getDeltaTime();
     }
-}
 
+    public void collideBottom(int item) {
+        this.onGround = true;
+        this.vy = 0;
+        this.y = item;
+    }
+
+    public void setVx(int vx) {
+        this.vx = vx;
+    }
+
+    public int getVx() {
+        return vx;
+    }
+
+    public void setVy(int vy) {
+        this.vy = vy;
+
+        if(vy != 0) {
+            this.onGround = false;
+        }
+    }
+
+    public int getVy() {
+        return vy;
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+    }
+
+    public boolean getOnGround() {
+        return onGround;
+    }
+
+}
