@@ -20,54 +20,79 @@ public class Block extends Rectangle {
     public int fallSpeed;
 
     public Block() {
-        this.image = new Texture(Gdx.files.internal("block.png"));
-        this.width = 24;
-        this.height = 24;
-        this.x = 100;
-        this.y = 24;
-        this.vx = 0;
-        this.vy = 0;
+        image = new Texture(Gdx.files.internal("block.png"));
+        width = 24;
+        height = 24;
+        x = 100;
+        y = 84;
+        vx = 0;
+        vy = 0;
 
-        this.walkAcceleration = 20;
-        this.walkMaxSpeed = 400;
+        walkAcceleration = 20;
+        walkMaxSpeed = 400;
 
-        this.jumpSpeed = 400;
-        this.fallSpeed = 40;
+        jumpSpeed = 600;
+        fallSpeed = 20;
+
+        onGround = false;
     }
 
     public void logic() {
-        this.movePlayer();
-        //this.jumpPlayer();
+        movePlayer();
+        jumpPlayer();
+
+        Gdx.app.log("On Ground", Boolean.toString(onGround));
+        Gdx.app.log("Speed", Float.toString(vy - jumpSpeed) + " of " + Float.toString(jumpSpeed));
+        Gdx.app.log("X: ", Float.toString(x));
+        Gdx.app.log("Y: ", Float.toString(y));
+        Gdx.app.log("VY: ", Float.toString(vy));
     }
 
     public void movePlayer() {
-        // move left
+        // left
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.vx = Math.max(this.vx - this.walkAcceleration, (this.walkMaxSpeed * -1));
+            vx = Math.max(vx - walkAcceleration, (walkMaxSpeed * -1));
         } 
-        else if(this.vx < 0){
-            this.vx = Math.min(this.vx + (this.walkAcceleration * 2), 0);
+        else if(vx < 0){
+            vx = Math.min(vx + (walkAcceleration * 2), 0);
         } 
-        // move right
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.vx = Math.min(this.vx + this.walkAcceleration, this.walkMaxSpeed);
-        } 
-        else if(this.vx > 0){
-            this.vx = Math.max(this.vx - (this.walkAcceleration * 2), 0);
-        }
-        this.x += this.vx * Gdx.graphics.getDeltaTime();
 
-        Gdx.app.log("Speed", Float.toString(this.vx - this.walkAcceleration) + " of " + Float.toString(this.walkMaxSpeed));
+        // right
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if((x + vx * Gdx.graphics.getDeltaTime()) > 400 && y < 90) {
+                vx = 0;
+            } else {
+                vx = Math.min(vx + walkAcceleration, walkMaxSpeed);
+            }
+        } 
+        else if(vx > 0){
+            vx = Math.max(vx - (walkAcceleration * 2), 0);
+        }
+
+        x += vx * Gdx.graphics.getDeltaTime();
     }
 
     public void jumpPlayer() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            this.vy = this.jumpSpeed;
-            this.y += this.vy * Gdx.graphics.getDeltaTime();
+        if(y < 20 ||
+        (x > 400 && y < 100)) {
+            onGround = true;
+            vy = 0;
+        } else {
+            onGround = false;
         }
-        if(this.vy > 0) {
-            this.vy = Math.min(this.vy, (this.jumpSpeed * 2));
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && onGround) {
+            vy = jumpSpeed;
+            Gdx.app.log("Pressed", Float.toString(vy));
         }
+
+        // test collision
+        if(!onGround) {
+            vy = vy - fallSpeed;
+            Gdx.app.log("unpressed", Float.toString(vy));
+        }
+
+        y += vy * Gdx.graphics.getDeltaTime();
     }
 }
 
