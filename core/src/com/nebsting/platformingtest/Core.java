@@ -23,7 +23,8 @@ public class Core extends Game {
 	SpriteBatch batch;
 
     TiledMap map;
-    MapLayer layer;
+    MapLayer[] layers;
+
     Polygon[] polygonObjects;
     Rectangle[] rectangleObjects;
 
@@ -40,25 +41,30 @@ public class Core extends Game {
         map = new TmxMapLoader().load("level/testlevel.tmx");
 
         // Map stuff
-        layer = map.getLayers().get(1);
-        MapObjects layerObjects = layer.getObjects();
+        layers = new MapLayer[2];
+        layers[0] = map.getLayers().get(0);
+        layers[1] = map.getLayers().get(1);
+        MapObjects polyLayer = layers[0].getObjects();
+        MapObjects recLayer = layers[1].getObjects();
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // Get collision objects
-        polygonObjects = new Polygon[layerObjects.getCount()];
-        rectangleObjects = new Rectangle[layerObjects.getCount()];
+        polygonObjects = new Polygon[polyLayer.getCount()];
+        rectangleObjects = new Rectangle[recLayer.getCount()];
 
-        for(int i=0; i<layerObjects.getCount(); i++) {
-            if(layerObjects.get(i) instanceof PolygonMapObject) {
-                PolygonMapObject cast = (PolygonMapObject) layerObjects.get(i);
+        for(int i=0; i<polygonObjects.length; i++) {
+            if(polyLayer.get(i) instanceof PolygonMapObject) {
+                PolygonMapObject cast = (PolygonMapObject) polyLayer.get(i);
                 Polygon result = cast.getPolygon();
 
                 polygonObjects[i] = result;
                 Gdx.app.log("ObjLayers", result.toString());
             }
-            if(layerObjects.get(i) instanceof RectangleMapObject) {
-                RectangleMapObject cast = (RectangleMapObject) layerObjects.get(i);
+        }
+        for(int i=0; i<rectangleObjects.length; i++) {
+            if(recLayer.get(i) instanceof RectangleMapObject) {
+                RectangleMapObject cast = (RectangleMapObject) recLayer.get(i);
                 Rectangle result = cast.getRectangle();
 
                 rectangleObjects[i] = result;
@@ -75,6 +81,17 @@ public class Core extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         player.logic();
+
+        // collision check for player
+        for(int i = 0; i<rectangleObjects.length; i++) {
+            // check for floor
+            if(rectangleObjects[i] instanceof Rectangle) {
+                Gdx.app.log("collision loop", Integer.toString(i));
+                if(rectangleObjects[i].contains(player.x, player.y-player.height)) {
+                    player.collideBottom(player.y);
+                }
+            }
+        }
 
         mapRenderer.setView(camera);
         mapRenderer.render();

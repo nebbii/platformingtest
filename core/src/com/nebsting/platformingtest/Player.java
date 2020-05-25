@@ -24,7 +24,7 @@ public class Player extends Rectangle {
         width = 24;
         height = 24;
         x = 100;
-        y = 84;
+        y = 184;
         vx = 0;
         vy = 0;
 
@@ -79,10 +79,6 @@ public class Player extends Rectangle {
     }
 
     public void gravity() {
-        if(y < 20) {
-            this.collideBottom(20);
-        } 
-
         if(!onGround) {
             vy = vy - fallSpeed;
         }
@@ -90,10 +86,10 @@ public class Player extends Rectangle {
         y += vy * Gdx.graphics.getDeltaTime();
     }
 
-    public void collideBottom(int item) {
+    public void collideBottom(float ypos) {
         this.onGround = true;
         this.vy = 0;
-        this.y = item;
+        this.y = ypos;
     }
 
     public void setVx(int vx) {
