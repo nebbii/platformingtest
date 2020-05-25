@@ -42,11 +42,13 @@ public class Player extends Rectangle {
         jumpPlayer();
         gravity();
 
+        /*
         Gdx.app.log("On Ground", Boolean.toString(onGround));
         Gdx.app.log("Speed", Float.toString(vy - jumpSpeed) + " of " + Float.toString(jumpSpeed));
         Gdx.app.log("X: ", Float.toString(x));
         Gdx.app.log("Y: ", Float.toString(y));
         Gdx.app.log("VY: ", Float.toString(vy));
+        */
     }
 
     public void movePlayer() {
@@ -73,7 +75,6 @@ public class Player extends Rectangle {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && onGround) {
             vy = jumpSpeed;
             this.setOnGround(false);
-            Gdx.app.log("Pressed", Float.toString(vy));
         }
     }
 
@@ -84,7 +85,6 @@ public class Player extends Rectangle {
 
         if(!onGround) {
             vy = vy - fallSpeed;
-            Gdx.app.log("unpressed", Float.toString(vy));
         }
 
         y += vy * Gdx.graphics.getDeltaTime();

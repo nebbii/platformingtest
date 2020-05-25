@@ -6,18 +6,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 
 public class Core extends Game {
     OrthographicCamera camera;
 	SpriteBatch batch;
 
     TiledMap map;
-    TiledMapTileLayer[] layer;
+    MapLayer layer;
+    Polygon[] objLayer;
 
     MapRenderer mapRenderer;
     Player player;
@@ -31,11 +36,22 @@ public class Core extends Game {
 
         map = new TmxMapLoader().load("level/testlevel.tmx");
 
-        layer = new TiledMapTileLayer[2];
-        //layer[0] = (TiledMapTileLayer)map.getLayers().get("visual");
-        layer[1] = (TiledMapTileLayer)map.getLayers().get("collide");
+        // Map stuff
+        layer = map.getLayers().get(1);
+        MapObjects layerObjects = layer.getObjects();
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        objLayer = new Polygon[layerObjects.getCount()];
+        for(int i=0; i<layerObjects.getCount(); i++) {
+            if(layerObjects.get(i) instanceof PolygonMapObject) {
+                PolygonMapObject obj = (PolygonMapObject) layerObjects.get(i);
+                Polygon polytest = obj.getPolygon();
+
+                objLayer[i] = polytest;
+                Gdx.app.log("ObjLayers", polytest.toString());
+            }
+        }
 
         player = new Player();
 	}
