@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class Core extends Game {
     OrthographicCamera camera;
@@ -25,8 +26,7 @@ public class Core extends Game {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
-        visualLayer =  
-
+        map = new TmxMapLoader().load("testlevel.tmx");
         player = new Player();
 	}
 
