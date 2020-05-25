@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Core extends Game {
     OrthographicCamera camera;
 	SpriteBatch batch;
+
+    TiledMap map;
+    TiledMapTileLayer[] maplayers;
 
     Player player;
 	
@@ -19,6 +24,8 @@ public class Core extends Game {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+
+        visualLayer =  
 
         player = new Player();
 	}
