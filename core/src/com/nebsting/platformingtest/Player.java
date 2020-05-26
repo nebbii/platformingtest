@@ -86,10 +86,27 @@ public class Player extends Rectangle {
         y += vy * Gdx.graphics.getDeltaTime();
     }
 
-    public void collideBottom(float ypos) {
+    public void collideTop(float pos) {
+        this.vy = 0;
+        this.y = pos;
+    }
+
+    public void collideBottom(float pos) {
         this.onGround = true;
         this.vy = 0;
-        this.y = ypos;
+        this.y = pos;
+    }
+
+    public void collideLeft(float pos) {
+        this.onGround = true;
+        this.vx = 0;
+        this.x = pos;
+    }
+
+    public void collideRight(float pos) {
+        this.onGround = true;
+        this.vx = 0;
+        this.x = pos;
     }
 
     public void setVx(int vx) {
