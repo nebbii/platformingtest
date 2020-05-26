@@ -42,8 +42,8 @@ public class Core extends Game {
 
         // Map stuff
         layers = new MapLayer[2];
-        layers[0] = map.getLayers().get(0);
-        layers[1] = map.getLayers().get(1);
+        layers[0] = map.getLayers().get(1);
+        layers[1] = map.getLayers().get(2);
         MapObjects polyLayer = layers[0].getObjects();
         MapObjects recLayer = layers[1].getObjects();
 
@@ -83,15 +83,7 @@ public class Core extends Game {
         player.logic();
 
         // collision check for player
-        for(int i = 0; i<rectangleObjects.length; i++) {
-            // check for floor
-            if(rectangleObjects[i] instanceof Rectangle) {
-                Gdx.app.log("collision loop", Integer.toString(i));
-                if(rectangleObjects[i].contains(player.x, player.y-player.height)) {
-                    player.collideBottom(player.y);
-                }
-            }
-        }
+        player.setOnGround(checkRectangleCollision());
 
         mapRenderer.setView(camera);
         mapRenderer.render();
@@ -108,4 +100,18 @@ public class Core extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+
+    public boolean checkRectangleCollision() {
+        boolean bool = false;
+        for(int i = 0; i<rectangleObjects.length; i++) {
+            if(rectangleObjects[i] instanceof Rectangle) {
+                if(rectangleObjects[i].contains(player.x, player.y-player.height)) {
+                    player.collideBottom(player.y);
+                    bool = true;
+                    //Gdx.app.log("collision loop", "Collided on "+Float.toString(player.y));
+                }
+            }
+        }
+        return bool;
+    }
 }
