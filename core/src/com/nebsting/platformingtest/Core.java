@@ -102,16 +102,36 @@ public class Core extends Game {
 	}
 
     public boolean checkRectangleCollision() {
-        boolean bool = false;
+        boolean landed = false;
         for(int i = 0; i<rectangleObjects.length; i++) {
             if(rectangleObjects[i] instanceof Rectangle) {
+                // top
+                if(rectangleObjects[i].contains(player.x, player.y)) {
+                    player.collideTop(player.y);
+                    Gdx.app.log("Collision", "Top: "+Float.toString(player.y));
+                }
+
+                // bottom
                 if(rectangleObjects[i].contains(player.x, player.y-player.height)) {
                     player.collideBottom(player.y);
-                    bool = true;
-                    //Gdx.app.log("collision loop", "Collided on "+Float.toString(player.y));
+                    landed = true;
+                    Gdx.app.log("Collision", "Bottom: "+Float.toString(player.y));
+                }
+                
+                // left
+                if(rectangleObjects[i].contains(player.x, player.y)) {
+                    player.collideLeft(player.x);
+                    Gdx.app.log("Collision", "Left: "+Float.toString(player.x));
+                }
+                
+                // right
+                if(rectangleObjects[i].contains(player.x+player.width, player.y)) {
+                    player.collideRight(player.x);
+                    Gdx.app.log("Collision", "Right: "+Float.toString(player.x));
                 }
             }
+
         }
-        return bool;
+        return landed;
     }
 }

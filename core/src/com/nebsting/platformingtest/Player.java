@@ -88,7 +88,7 @@ public class Player extends Rectangle {
 
     public void collideTop(float pos) {
         this.vy = 0;
-        this.y = pos;
+        this.y = pos-1;
     }
 
     public void collideBottom(float pos) {
@@ -98,15 +98,13 @@ public class Player extends Rectangle {
     }
 
     public void collideLeft(float pos) {
-        this.onGround = true;
         this.vx = 0;
-        this.x = pos;
+        this.x = pos+1;
     }
 
     public void collideRight(float pos) {
-        this.onGround = true;
         this.vx = 0;
-        this.x = pos;
+        this.x = pos-1;
     }
 
     public void setVx(int vx) {
